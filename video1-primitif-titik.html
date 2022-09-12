@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="400" height="400"></canvas>
+    <!-- kalau tag script ditaruh di head akan menghasilkan null
+    karena canvas1 belum dibuat tapi udah dipanggil 
+    kalau mau semisal di atas bisa tapi pake function trs
+    nanti di bodynya pake on load -->
+    <script>
+        var canvasKita;
+
+        function gbr_titik(imageDataTemp,x,y,r,g,b){
+        var index;
+        index = 4 *(x+(y*canvasKita.width));
+        imageDataTemp.data[index] = r;
+        imageDataTemp.data[index+1] = g;
+        imageDataTemp.data[index+2] = b;
+        imageDataTemp.data[index+3] = 255;     
+        }
+
+        // sesuai dg css
+        canvasKita = document.querySelector("#canvas1");
+        console.log(canvasKita);
+        // console.log(canvasKita.clientWidth);
+        // console.log(canvasKita.id);
+
+        // cara gmn akses gambarnya
+        var ctx;
+        ctx = canvasKita.getContext("2d");
+        // koordinat, pjg, lebar
+        // ctx.fillRect(20,20,100,100);
+
+        // kita ga pake lgs fillrect tp pake image data
+        // akses 2 dimensi X = x*4 , Y = y
+        // akses 1 dimensi 4 * (x+(y*image_width))
+
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
+        for(var j=0;j<100;j++){
+            for(var i=0;i<100;i++){
+                // warna merah dikurangi dari persenan i makanya bisa gradasi
+            gbr_titik(imageDataSaya,100+i,100+j,255*i/100,0,0);   
+        }
+        }
+
+        // var x,y;
+        // x = 100; y=100;
+        // var index;
+        // index = 4 *(x+(y*canvasKita.width));
+        // imageDataSaya.data[index] = 255;
+        // imageDataSaya.data[index+1] = 0;
+        // imageDataSaya.data[index+2] = 0;
+        // imageDataSaya.data[index+3] = 255;        
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0 , 0);
+    </script>
+</body>
+</html>
