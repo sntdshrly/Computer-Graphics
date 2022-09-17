@@ -9,23 +9,20 @@
         #mycanvas {
             border: 2px solid black;
         }
+        #myText
+        {
+        padding-top: 2vh;
+        }
     </style>
 </head>
 <body>
+    
+    <input type="text" id="user_input">
+    <button onclick="myFunctionSubmit();">Submit</button>
+    <button onclick="myFunctionRandom();">Random</button><br><br>
     <canvas id="mycanvas" width="600" height="600"></canvas>
-        <input type="text" id="user_input" name="user_input" value=""><br><br>
-        <button onclick="myFunctionSubmit()">Submit</button>
-        <button onclick="">Random</button>
-    <script type="text/javascript">
-        function myFunctionSubmit() {
-            let userInput = document.getElementById("user_input");
-            if (userInput=="Trapesium"){
-                gbr_trapesium();
-                // console.log(userInput);
-            }
-            console.log(userInput);
-            console.log("clicked");
-        }
+    <h1 id="myText"></h1>
+    <script>
         const kanvas = document.querySelector("#mycanvas");
         const ctx = kanvas.getContext("2d");
         let dataGambar = ctx.getImageData(0,0,kanvas.width,kanvas.height);
@@ -40,14 +37,14 @@
             datanya.data[index+3] = 255;
         }
 
-        function gbr_trapesium(){
-            for(i=1;i<=100;i++){
-            for(j=100;j>0+i;j--){
+        let nama_bgn_rg = "";
+
+        function gbr_bgn_rg1(){
+        nama_bgn_rg = "Trapesium"
+        for(i=0;i<=100;i++){
+            for(j=100;j>i;j--){
                 gbr_titik(dataGambar,{x:100-i,y:j},{r:255,g:0,b:0});
-                console.log("j",j);
-                console.log("i",i);
             }
-            console.log("-")
         }
 
         for(i=0;i<100;i++){
@@ -55,7 +52,7 @@
                 gbr_titik(dataGambar,{x:100+j,y:1+i},{r:255,g:0,b:0});
             }
         }
-
+        
         for(i=0;i<100;i++){
             for(j=0;j<i+1;j++){
                 gbr_titik(dataGambar,{x:200+j,y:1+i},{r:255,g:0,b:0});
@@ -63,6 +60,60 @@
         }
         }
 
+        function gbr_bgn_rg2(){
+        nama_bgn_rg = "Trapesium Siku-Siku"
+        for(i=0;i<=100;i++){
+            for(j=100;j>i;j--){
+                gbr_titik(dataGambar,{x:100-i,y:j},{r:255,g:0,b:0});
+            }
+        }
+        for(i=0;i<100;i++){
+            for(j=0;j<100;j++){
+                gbr_titik(dataGambar,{x:100+j,y:1+i},{r:255,g:0,b:0});
+            }
+        }
+        }
+
+        function gbr_bgn_rg3(){
+        nama_bgn_rg = "Jajar Genjang"
+        for(i=0;i<=50;i++){
+            for(j=0;j<=100;j++){
+                gbr_titik(dataGambar,{x:100+j-i,y:i},{r:255,g:219,b:88});
+            }
+        }
+        }
+
+        function random(){
+            var i  = Math.floor(Math.random()*20)%4;
+            if(i<=0) return random();
+            return i;
+        }
+
+        function execute(){
+            clear(ctx);
+            var i = random();
+            eval('gbr_bgn_rg'+i+'()');
+        }
+        
+        function clear(ctx){
+        for(i=0;i<=600;i++){
+            for(j=0;j<=600;j++){
+                gbr_titik(dataGambar,{x:i,y:j},{r:255,g:255,b:255});
+            }
+        }
+        }
+
+        function myFunctionSubmit() {
+            let userInput = document.getElementById("user_input").value;
+            if (userInput==nama_bgn_rg){
+                document.getElementById("myText").innerHTML = "Selamat Anda Berhasil";
+            }
+        }
+
+        function myFunctionRandom() {
+            execute();
+            ctx.putImageData(dataGambar,0,0); // dipanggil terakhir kali cukup 1 kali
+        }
     </script>
 </body>
 </html>
