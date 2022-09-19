@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="400" height="400"></canvas>
+    <script>
+        function gbr_titik(imageDataTemp,x,y,r,g,b){
+        // garis x sama y dibulatkan
+        var index = 4 *(Math.ceil(x)+(Math.ceil(y)*canvasKita.width));
+        imageDataTemp.data[index] = r;
+        imageDataTemp.data[index+1] = g;
+        imageDataTemp.data[index+2] = b;
+        imageDataTemp.data[index+3] = 255;     
+        }
+        // gradien delta x / delta y
+        // m = 2 , penambahan 2x ; y+1
+        // m = 1/2 , penambahan 1x ; y+2
+        function dda_line(imageDataSaya,x1,y1,x2,y2,r,g,b){
+            var dx = x2-x1; // bisa positif/negatif
+            var dy = y2-y1;
+            if(Math.abs(dx)>Math.abs(dy)){
+                // gambar garis jalan di x
+                if(x2>x1){
+                 // ke kanan   
+                 var y = y1;
+                 for(var x = x1; x<x2; x++){
+                    y = y + dy/Math.abs(dx); //1/m
+                    gbr_titik(imageDataSaya,x,y,r,g,b)
+                 }
+                }
+                else{ 
+                    // ke kiri
+                    var y = y1;
+                    for(var x = x1; x>x2; x--){
+                        y = y + dy/Math.abs(dx); //1/m
+                        gbr_titik(imageDataSaya,x,y,r,g,b)
+                 }
+                }
+            }
+            else{
+                // jalan di y
+                if(y2>y1){
+                 // ke atas   
+                 var x = x1;
+                 for(var y = y1; y<y2; y++){
+                    x = x + dx/Math.abs(dy); //m
+                    gbr_titik(imageDataSaya,x,y,r,g,b)
+                 }
+                }
+                else{ 
+                    // ke bawah
+                    var x = x1;
+                    for(var y = y1; y>y2; y--){
+                        x = x + dx/Math.abs(dy); //m
+                        gbr_titik(imageDataSaya,x,y,r,g,b)
+                 }
+                }
+            }
+
+    }
+
+        // sesuai dg css
+        var canvasKita = document.querySelector("#canvas1");
+    
+        // cara gmn akses gambarnya
+        var ctx = canvasKita.getContext("2d");
+
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
+        
+        // draw here
+        dda_line(imageDataSaya,0,0,100,100,255,0,0);
+        dda_line(imageDataSaya,0,200,100,100,255,0,0);
+        dda_line(imageDataSaya,200,0,100,100,255,0,0);
+        dda_line(imageDataSaya,0,200,200,200,255,0,0);
+        
+        dda_line(imageDataSaya,300,250,220,300,255,0,0); // garis titik2 teratasi dg x, dan y diceiling
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0 , 0);
+    </script>
+</body>
+</html>
