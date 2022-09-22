@@ -22,10 +22,9 @@
         var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
     
         function gbr_titik(imageDataTemp,x,y,r,g,b){
-        // garis x sama y dibulatkan
-        var index = 4 *(x+y*canvasKita.width);
-        imageDataTemp.data[index] = r;
-        imageDataTemp.data[index+1] = g;
+            var index = 4 *(x+y*canvasKita.width);
+            imageDataTemp.data[index] = r;
+            imageDataTemp.data[index+1] = g;
         imageDataTemp.data[index+2] = b;
         imageDataTemp.data[index+3] = 255;     
         }
@@ -44,6 +43,7 @@
                 if(y2>y1){
                     for(let y=y1;y<y2;y++){
                     x+=dx/Math.abs(dy);
+                    // garis x sama y dibulatkan
                     gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
                 }
                 }
@@ -60,7 +60,7 @@
                 let y = y1;
                 // kanan ; positif
                 if(x2>x1){
-                for(let x=x1;x<x2;x++){
+                    for(let x=x1;x<x2;x++){
                     y+=dy/Math.abs(dx);
                     gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
                 }
