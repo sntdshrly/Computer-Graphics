@@ -128,21 +128,28 @@
             ctx.putImageData(imageDataSaya, 0 , 0);
         }
 
-        
-        var i=0;
-        var j=0;
-        var y1=600;
-        var y2=600;
+        var x = 100;
+        var y = 100;
         function gbr_up_down(){
             if(event.code=="ArrowUp"){
-                j = 0;
-                gbr_garis(imageDataSaya,100,y1,100,y2=y1-i,255,0,0);
-                i += 50;
+                if (y >= 0) {
+                    gbr_garis(imageDataSaya,x,y,x,y-10,255,0,0);
+                    y -= 10;
+                }
             }
             else if(event.code=="ArrowDown"){
-                i = 0;
-                gbr_garis(imageDataSaya,100,y2,100,y1=y2+j,0,255,0);
-                j += 50;
+                gbr_garis(imageDataSaya,x,y,x,y+10,255,0,0);
+                    y += 10;
+            }
+            else if(event.code=="ArrowRight"){
+                if (x >= 0) {
+                    gbr_garis(imageDataSaya,x,y,x+10,y,255,0,0);
+                    x += 10;
+                }
+            }
+            else if(event.code=="ArrowLeft"){
+                gbr_garis(imageDataSaya,x,y,x-10,y,255,0,0);
+                x -= 10;
             }
             else if(event.code=="Space"){
                 clear(ctx);
