@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas1" width="800" height="800"></canvas>
+    <canvas id="canvas1" width="400" height="400"></canvas>
     <script>
         // sesuai dg css
         var canvasKita = document.querySelector("#canvas1");
@@ -132,24 +132,37 @@
         var y = 100;
         function gbr_up_down(){
             if(event.code=="ArrowUp"){
-                if (y >= 0) {
+                if(y!=0 && x!=canvasKita.width){
                     gbr_garis(imageDataSaya,x,y,x,y-10,255,0,0);
                     y -= 10;
-                }
             }
+            else{
+                gbr_garis(imageDataSaya,canvasKita.width-1,y,canvasKita.width-1,y-10,255,0,0);
+                y-=10;
+            }
+        
+        }
             else if(event.code=="ArrowDown"){
+                if(y!=canvasKita.height && x!=canvasKita.width){
                 gbr_garis(imageDataSaya,x,y,x,y+10,255,0,0);
                     y += 10;
             }
+            else{
+                gbr_garis(imageDataSaya,canvasKita.width-1,y,canvasKita.width-1,y+10,255,0,0);
+                    y += 10;
+            }
+        }
             else if(event.code=="ArrowRight"){
-                if (x >= 0) {
+                    if(x!=canvasKita.width){
                     gbr_garis(imageDataSaya,x,y,x+10,y,255,0,0);
                     x += 10;
-                }
+                    }
             }
             else if(event.code=="ArrowLeft"){
+                if(x!=0){
                 gbr_garis(imageDataSaya,x,y,x-10,y,255,0,0);
                 x -= 10;
+                }
             }
             else if(event.code=="Space"){
                 clear(ctx);
