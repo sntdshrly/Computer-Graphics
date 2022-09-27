@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        // sesuai dg css
+        var canvasKita = document.querySelector("#canvas1");
+        // cara gmn akses gambarnya
+        var ctx = canvasKita.getContext("2d");
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
+        function gbr_titik(imageDataTemp,x,y,r,g,b){
+            // garis x sama y dibulatkan
+            var index = 4 *(Math.ceil(x)+(Math.ceil(y)*canvasKita.width));
+            // var index = 4 *(x+y*canvasKita.width);
+            imageDataTemp.data[index] = r;
+            imageDataTemp.data[index+1] = g;
+            imageDataTemp.data[index+2] = b;
+            imageDataTemp.data[index+3] = 255;     
+        }
+        function gbr_lingkaran(imageDataTemp, xc, yc, radius, r,g,b){
+        for (x = xc-radius; x<xc+radius; x++){
+            y = yc + Math.sqrt(Math.pow(radius,2)-Math.pow((x-xc),2));
+            gbr_titik(imageDataTemp,x,y,r,g,b);
+            y = yc - Math.sqrt(Math.pow(radius,2)-Math.pow((x-xc),2));
+            gbr_titik(imageDataTemp,x,y,r,g,b);
+        }
+        }
+        function gbr_lingkaran_polar(imageDataTemp, xc, yc, radius, r,g,b){
+        for(theta = 0; theta<Math.PI*2;theta += 0.01){
+            x = xc + radius * Math.cos(theta);
+            y = yc + radius * Math.sin(theta);
+            gbr_titik(imageDataTemp,x,y,r,g,b);
+        }
+}
+        let jalan = 0;
+        function lingkaran_jalan(){
+            //clear
+            ctx.clearRect(0,0,canvasKita.width,canvasKita.height);
+            console.log(jalan);
+            imageDataSaya = ctx.getImageData(0,0,canvasKita.width,canvasKita.height)
+
+            gbr_lingkaran_polar(imageDataSaya,200,200,100+jalan,255,0,0,0);
+            jalan = (jalan+1)%200;
+            ctx.putImageData(imageDataSaya, 0 , 0);
+            requestAnimationFrame(lingkaran_jalan);
+        }
+
+        // PR
+        // lingkaran tiap klik ky tusuk sate
+        
+
+        // lingkaran memperbesar trs ilang
+        // loading bar muter" trs bulet kaya lingkaran udh gitu pudar --> requestAnimationFrame
+
+        // draw here
+        // gbr_titik(imageDataSaya,100,101,255,0,0,0);
+        // gbr_lingkaran(imageDataSaya,100,100,100,255,0,0,0);
+        // gbr_lingkaran_polar(imageDataSaya,100,100,50,255,0,0,0);
+        lingkaran_jalan();
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0 , 0);
+    </script>
+</body>
+</html>
