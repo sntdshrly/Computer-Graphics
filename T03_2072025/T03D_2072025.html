@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        function gbr_titik(imageDataTemp, x, y, r, g, b, a) {
+            // garis x sama y dibulatkan
+            var index = 4 * (Math.ceil(x) + (Math.ceil(y) * canvasKita.width));
+            imageDataTemp.data[index] = r;
+            imageDataTemp.data[index + 1] = g;
+            imageDataTemp.data[index + 2] = b;
+            imageDataTemp.data[index + 3] = a;
+        }
+        function gbr_lingkaran(imageDataTemp, posisi, radius, warna) {
+            let { xc, yc } = posisi;
+            let { r, g, b, a } = warna;
+            for (theta = 0; theta < Math.PI * 2; theta += 0.01) {
+                x = xc + radius * Math.cos(theta);
+                y = yc + radius * Math.sin(theta);
+                gbr_titik(imageDataTemp, x, y, r, g, b, a);
+            }
+        }
+
+        let jalan = 0;
+        let xc = 0;
+        let yc = 0;
+        let alpha_control = 30;
+        function lingkaran_jalan() {
+            //clear
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height)
+
+            gbr_lingkaran(imageDataSaya, { xc: xc, yc: yc }, 100 + jalan, { r: 255, g: 0, b: 0, a: alpha_control });
+            jalan = (jalan + 1) % 200;
+            alpha_control -= 10;
+            ctx.putImageData(imageDataSaya, 0, 0);
+            if (alpha_control <= 0) {
+                cancelAnimationFrame(lingkaran_jalan);
+            }
+            else {
+                requestAnimationFrame(lingkaran_jalan);
+            }
+        }
+
+        // Draw Here
+        canvasKita.addEventListener("click", (event) => {
+            xc = event.offsetX;
+            yc = event.offsetY;
+            alpha_control = 255;
+            jalan = 0;
+            lingkaran_jalan();
+        });
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0, 0);
+    </script>
+</body>
+
+</html>
