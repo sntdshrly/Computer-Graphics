@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        // sesuai dg css
+        var canvasKita = document.querySelector("#canvas1");
+        // cara gmn akses gambarnya
+        var ctx = canvasKita.getContext("2d");
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
+        // draw here
+        var point_array = [
+            {x:100,y:100},
+            {x:150,y:100},
+            {x:150,y:150},
+            {x:100,y:200},
+        ]
+        // point_array[0].x // 100
+        polygon(imageDataSaya,point_array,[255,0,0]);
+        var point_array_2 = [
+            {x:200,y:100},
+            {x:350,y:100},
+            {x:350,y:150},
+            {x:200,y:200},
+        ]
+        polygon(imageDataSaya,point_array_2,[0,255,0]);
+        
+        floodFillNaive(imageDataSaya, canvasKita, 110, 110, {r:0,g:0,b:0}, {r:255,g:0,b:0})
+        floodFillStack(imageDataSaya, canvasKita, 210, 110, {r:0,g:0,b:0}, {r:0,g:255,b:0})
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0 , 0);
+    </script>
+</body>
+</html>
