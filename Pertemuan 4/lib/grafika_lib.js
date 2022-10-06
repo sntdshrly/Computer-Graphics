@@ -94,8 +94,6 @@ function floodFillNaive(imageDataSaya, canvas, x, y, toFlood, color) {
 
 
 function floodFillStack(imageDataSaya, canvas, x0, y0, toFlood, color) {
-    console.log(x0);
-    console.log(y0);
     var tumpukan = [];
     tumpukan.push({ x: x0, y: y0 });
     while (tumpukan.length > 0) {

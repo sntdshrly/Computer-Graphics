@@ -74,54 +74,76 @@ function polygon(imageDataSaya, titik, warna) {
     gbr_garis(imageDataSaya, titik[titik.length - 1].x, titik[titik.length - 1].y, titik[0].x, titik[0].y, r, g, b);
 }
 
-function boundaryFill(datanya, posisi, batas, warna){
+function boundaryFill(datanya, posisi, batas, warna) {
     // kalau titik yg di posisi bisa diwarna, maka warnai dulu
     const warna_titik_skrg = get_warna(datanya, posisi);
-    if(warna_titik_skrg.r != batas.r) {
+    if (warna_titik_skrg.r != batas.r) {
         // warnai
-        gbr_titik_arr(datanya,posisi,warna);
-        boundaryFill(datanya, {x:posisi.x+1,y:posisi.y}, batas, warna);
-        boundaryFill(datanya, {x:posisi.x,y:posisi.y+1}, batas, warna);
-        boundaryFill(datanya, {x:posisi.x-1,y:posisi.y}, batas, warna);
+        gbr_titik_arr(datanya, posisi, warna);
+        boundaryFill(datanya, { x: posisi.x + 1, y: posisi.y }, batas, warna);
+        boundaryFill(datanya, { x: posisi.x, y: posisi.y + 1 }, batas, warna);
+        boundaryFill(datanya, { x: posisi.x - 1, y: posisi.y }, batas, warna);
         // boundaryFill(datanya, {x:posisi.x,y:posisi.y-1}, batas, warna);
     }
 }
 
-function boundaryFillStack(datanya, posisi, batas, warna){
+function boundaryFillStack(datanya, posisi, warna) {
     // kalau titik yg di posisi bisa diwarna, maka warnai dulu
     let warna_titik_skrg = get_warna(datanya, posisi);
     let my_stack = [];
     my_stack.push(posisi);
-    console.log(!cekWarna(warna_titik_skrg,batas));
-    while(my_stack.length>0){
+    while (my_stack.length > 0) {
         posisi = my_stack.pop();
         warna_titik_skrg = get_warna(datanya, posisi);
-        console.log(warna_titik_skrg);
-        if(!cekWarna(warna_titik_skrg, batas)) {
-            gbr_titik_arr(datanya,posisi,warna);
-            if(!cekWarna(get_warna(datanya,{x:x+1,y:y}),warna)){
-                console.log("tes");
-                my_stack.push({x:posisi.x+1,y:posisi.y});
-            }
+        // kalau warna yg di kotak != border
+        if (cekWarna(warna_titik_skrg, {r:0,g:0,b:0})) {
+            gbr_titik_arr(datanya, posisi, warna);
+            my_stack.push({ x: posisi.x + 1, y: posisi.y });
+            my_stack.push({ x: posisi.x, y: posisi.y + 1 });
+            my_stack.push({ x: posisi.x - 1, y: posisi.y });
+            my_stack.push({ x: posisi.x, y: posisi.y - 1 });
         }
     }
+    ctx.putImageData(imageDataSaya, 0, 0);
 }
 
-function cekWarna(color1, color2){
-    if(color1.r == color2.r && color1.g == color2.g && color1.b == color2.b){
+function get_warna(datanya, posisi) {
+    let { x, y } = posisi;
+    let index = (x + y * canvasKita.width) * 4;
+    let r, g, b;
+    r = datanya.data[index];
+    g = datanya.data[index + 1];
+    b = datanya.data[index + 2];
+    return { r: r, g: g, b: b };
+};
+
+function cekWarna(color1, color2) {
+    if (color1.r == color2.r && color1.g == color2.g && color1.b == color2.b) {
         return true
     }
-    else{
+    else {
         return false
     }
 }
 
-function get_warna(datanya,posisi){
-    let { x, y } = posisi;
-    let index = (x+y*canvasKita.width)*4;
-    let r,g,b;
-    r=datanya.data[index];
-    g=datanya.data[index+1];
-    b=datanya.data[index+2];
-    return {r:r,g:g,b:b};
-};
+function gbr_persegi_unfilled() {
+    gbr_garis(imageDataSaya, 100, 100, 200, 100, 255, 0, 0); //x
+    gbr_garis(imageDataSaya, 100, 200, 200, 200, 255, 0, 0);
+
+    gbr_garis(imageDataSaya, 100, 100, 100, 200, 255, 0, 0); //y
+    gbr_garis(imageDataSaya, 200, 100, 200, 200, 255, 0, 0);
+}
+
+titik = [];
+function gbr_klik_persegi_unfilled() {
+    console.log(event);
+    let x = event.offsetX;
+    let y = event.offsetY;
+    // returns a random integer from 50 to 100:
+    let angka_random = Math.floor(Math.random() * 101) + 50;
+    gbr_garis(imageDataSaya, x, y, x + angka_random, y, 255, 0, 0); //x
+    gbr_garis(imageDataSaya, x, y + angka_random, x + angka_random, y + angka_random, 255, 0, 0); //x
+    gbr_garis(imageDataSaya, x, y, x, y + angka_random, 255, 0, 0); //y
+    gbr_garis(imageDataSaya, x + angka_random, y, x + angka_random, y + angka_random, 255, 0, 0); //y
+    ctx.putImageData(imageDataSaya, 0, 0);
+}
