@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        // sesuai dg css
+        var canvasKita = document.querySelector("#canvas1");
+        // cara gmn akses gambarnya
+        var ctx = canvasKita.getContext("2d");
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        function gbr_titik_arr(datanya, posisi, warna) {
+            let { x, y } = posisi;
+            let { r, g, b } = warna;
+            let index = 4 * (Math.ceil(x) + (Math.ceil(y) * canvasKita.width));
+            datanya.data[index] = r;
+            datanya.data[index + 1] = g;
+            datanya.data[index + 2] = b
+            datanya.data[index + 3] = 255;
+        }
+        function gbr_titik(imageDataTemp, x, y, r, g, b) {
+            // garis x sama y dibulatkan
+            var index = 4 * (Math.ceil(x) + (Math.ceil(y) * canvasKita.width));
+            // var index = 4 *(x+y*canvasKita.width);
+            imageDataTemp.data[index] = r;
+            imageDataTemp.data[index + 1] = g;
+            imageDataTemp.data[index + 2] = b;
+            imageDataTemp.data[index + 3] = 255;
+        }
+
+        function gbr_lingkaran_polar(imageDataTemp, xc, yc, radius, r, g, b) {
+            for (theta = 0; theta < Math.PI * 2; theta += 0.01) {
+                x = xc + radius * Math.cos(theta);
+                y = yc + radius * Math.sin(theta);
+                gbr_titik(imageDataTemp, x, y, r, g, b);
+                // floodFillStack(imageDataTemp, { x: 300, y: 300 }, { r: 255, g: g, b: b });
+            }
+        }
+        function floodFillStack(datanya, posisi, warna) {
+            // kalau titik yg di posisi bisa diwarna, maka warnai dulu
+            let warna_titik_skrg = get_warna(datanya, posisi);
+            let my_stack = [];
+            my_stack.push(posisi);
+            while (my_stack.length > 0) {
+                posisi = my_stack.pop();
+                warna_titik_skrg = get_warna(datanya, posisi);
+                // kalau warna yg di kotak != border
+                if (cekWarna(warna_titik_skrg, { r: 0, g: 0, b: 0 })) {
+                    console.log("tes");
+                    gbr_titik_arr(datanya, posisi, warna);
+                    my_stack.push({ x: posisi.x + 1, y: posisi.y });
+                    my_stack.push({ x: posisi.x, y: posisi.y + 1 });
+                    my_stack.push({ x: posisi.x - 1, y: posisi.y });
+                    my_stack.push({ x: posisi.x, y: posisi.y - 1 });
+                }
+            }
+            ctx.putImageData(imageDataSaya, 0, 0);
+        }
+        function get_warna(datanya, posisi) {
+            let { x, y } = posisi;
+            let index = (x + y * canvasKita.width) * 4;
+            let r, g, b;
+            r = datanya.data[index];
+            g = datanya.data[index + 1];
+            b = datanya.data[index + 2];
+            return { r: r, g: g, b: b };
+        };
+        function cekWarna(color1, color2) {
+            if (color1.r == color2.r && color1.g == color2.g && color1.b == color2.b) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        let jalan = 0;
+        function lingkaran_jalan() {
+            //clear
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height)
+
+            gbr_lingkaran_polar(imageDataSaya, 200, 200, 5 + jalan, 255, 0, 0, 0);
+            jalan = (jalan + 1) % 50;
+            ctx.putImageData(imageDataSaya, 0, 0);
+            requestAnimationFrame(lingkaran_jalan);
+        }
+        lingkaran_jalan();
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0, 0);
+    </script>
+</body>
+
+</html>
