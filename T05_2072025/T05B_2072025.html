@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="600" height="600"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
+        function gbr_klik(){
+            // console.log(event);
+            let titik = [
+            {x:event.offsetX,y:event.offsetY},
+            {x:event.offsetX,y:event.offsetY+50},
+            {x:event.offsetX+50,y:event.offsetY+50},
+            {x:event.offsetX+50,y:event.offsetY},
+            ]
+            polygon(imageDataSaya, titik, [255,0,0]);
+            ctx.putImageData(imageDataSaya, 0 , 0);
+        }
+        canvasKita.addEventListener("click",gbr_klik);
+        // draw here
+        function reset_func() {
+        }
+    </script>
+    <br>
+    <button type="reset_btn" onClick="reset_func()">Reset</button>
+</body>
+
+</html>

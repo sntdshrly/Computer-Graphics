@@ -140,3 +140,44 @@ function gbr_lingkaran_sudut(imageDataTemp, xc, yc, radius, r,g,b){
         gbr_titik(imageDataTemp,x,y,r,g,b);
     }
 }
+function floodFillNaive(imageDataSaya, canvas, x, y, toFlood, color) {
+    var index = 4 * (x + (y * canvas.width));
+    var r1 = imageDataSaya.data[index];
+    var g1 = imageDataSaya.data[index + 1];
+    var b1 = imageDataSaya.data[index + 2];
+    // mau ganti warna
+    if (r1 == toFlood.r && g1 == toFlood.g && b1 == toFlood.b) {
+        imageDataSaya.data[index] = color.r;
+        imageDataSaya.data[index + 1] = color.g;
+        imageDataSaya.data[index + 2] = color.b;
+        imageDataSaya.data[index + 3] = 255;
+        floodFillNaive(imageDataSaya, canvas, x + 1, y, toFlood, color);
+        floodFillNaive(imageDataSaya, canvas, x - 1, y, toFlood, color);
+        floodFillNaive(imageDataSaya, canvas, x, y + 1, toFlood, color);
+        // floodFillNaive(imageDataSaya, canvas, x, y - 1, toFlood, color);
+    }
+}
+function floodFillStack(imageDataSaya, canvas, x0, y0, toFlood, color) {
+    var tumpukan = [];
+    tumpukan.push({ x: x0, y: y0 });
+    while (tumpukan.length > 0) {
+        // ambil 1 titik, trs cek bisa diwarna atau ga, kalau bisa warna lalu masukan dalam tumpukan titik sekitarnya
+        var titik_skrg = tumpukan.pop();
+        var index_skrg = 4 * (titik_skrg.x + (titik_skrg.y * canvas.width));
+        var r1 = imageDataSaya.data[index_skrg];
+        var g1 = imageDataSaya.data[index_skrg + 1];
+        var b1 = imageDataSaya.data[index_skrg + 2];
+        if (r1 == toFlood.r && g1 == toFlood.g && b1 == toFlood.b) {
+            // mau ganti warna
+            imageDataSaya.data[index_skrg] = color.r;
+            imageDataSaya.data[index_skrg + 1] = color.g;
+            imageDataSaya.data[index_skrg + 2] = color.b;
+            imageDataSaya.data[index_skrg + 3] = 255;
+
+            tumpukan.push({ x: titik_skrg.x + 1, y: titik_skrg.y })
+            tumpukan.push({ x: titik_skrg.x - 1, y: titik_skrg.y })
+            // tumpukan.push({ x: titik_skrg.x, y: titik_skrg.y + 1 })
+            tumpukan.push({ x: titik_skrg.x, y: titik_skrg.y - 1 })
+        }
+    }
+}

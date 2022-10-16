@@ -21,27 +21,34 @@
         var canvasKita = document.querySelector("#canvas1");
         // cara gmn akses gambarnya
         var ctx = canvasKita.getContext("2d");
-        ctx.font = "bold 18px Courier";
-        ctx.fillText("Loading...", 100, 140);
         // mulai drmn , sebesar apa
         var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
         // draw here
-        let jalan = 0;
-        function persegi_jalan() {
-            //clear
-            // ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
-            ctx.clearRect(99, 149, 311, 201);
-            ctx.fillText(Math.floor(jalan/2)+"%", 250, 220);
-            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
-            gbr_persegi_unfilled_2();
-            gbr_garis_jalan(jalan);
-            floodFillStack(imageDataSaya, { x: 299, y: 151 }, { r: 0, g: 255, b: 0 })
-            floodFillStack(imageDataSaya, { x: 101, y: 151 }, { r: 255, g: 0, b: 0 })
-            jalan = (jalan + 1) % 200;
-            ctx.putImageData(imageDataSaya, 0, 0);
-            requestAnimationFrame(persegi_jalan);
-        }
-        persegi_jalan();
+        let titik = [
+            {x:200,y:200},
+            {x:200,y:250},
+            {x:250,y:250},
+            {x:250,y:200}
+        ]
+        polygon(imageDataSaya, titik, [255,0,0]);
+        // TRANSLASI
+        // let titik_2 = translasi_byk(titik,[-200,-200]);
+        // polygon(imageDataSaya, titik_2, [255,0,0]);
+
+        // SKALA
+        // let titik_2 = skala_byk(titik,[2,2]);
+        // polygon(imageDataSaya, titik_2, [255,0,0]);
+        
+        // ROTASI
+        // let titik_3 = rotasi_byk(titik_2,0.2);
+        // polygon(imageDataSaya, titik_3, [0,0,255]);
+        // let titik_4 = translasi_byk(titik_3,[200,200]);
+        // polygon(imageDataSaya, titik_4, [0,255,0]);
+
+        // ROTASI FIXED
+        let titik_fixed = rotasi_byk_fixed(titik,0.1);
+        polygon(imageDataSaya, titik_fixed, [255,0,0]);
+
         // tempatnya di mana
         ctx.putImageData(imageDataSaya, 0, 0);
     </script>

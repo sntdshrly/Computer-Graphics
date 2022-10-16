@@ -191,7 +191,6 @@ function getBunga(){
     floodFillStack(imageDataSaya, {x:430,y:175},{r:255,g:0,b:0});
     floodFillStack(imageDataSaya, {x:440,y:165},{r:255,g:0,b:0});
 }
-
 function gbr_garis(imageDataSaya, x1, y1, x2, y2, r, g, b) {
     var dx = x2 - x1;
     var dy = y2 - y1;
@@ -234,19 +233,15 @@ function gbr_garis(imageDataSaya, x1, y1, x2, y2, r, g, b) {
         }
     }
 }
-
-function gbr_persegi_unfilled_1(jalan) {
-    gbr_garis(imageDataSaya, 100, 150, 110+jalan, 150, 255, 0, 0); //x
-    gbr_garis(imageDataSaya, 100, 200, 110+jalan, 200, 255, 0, 0);
-    gbr_garis(imageDataSaya, 100, 150, 100, 200, 255, 0, 0); //y
-    gbr_garis(imageDataSaya, 110+jalan, 150, 110+jalan, 200, 255, 0, 0);
-    floodFillStack(imageDataSaya, {x:105,y:160},{r:255,g:0,b:0});
+function gbr_garis_jalan(jalan) {
+    gbr_garis(imageDataSaya, 100+jalan, 151, 100+jalan, 200, 255, 0, 0); //y
+    // floodFillStack(imageDataSaya, {x:101,y:151}, {r:255,g:0,b:0})
 }
 
 function gbr_persegi_unfilled_2() {
-    gbr_garis(imageDataSaya, 110, 150, 310, 150, 0, 255, 0); //x
-    gbr_garis(imageDataSaya, 110, 200, 310, 200, 0, 255, 0);
-    gbr_garis(imageDataSaya, 110, 150, 110, 200, 0, 255, 0); //y
-    gbr_garis(imageDataSaya, 310, 150, 310, 200, 0, 255, 0);
-    floodFillStack(imageDataSaya, {x:115,y:160},{r:0,g:255,b:0});
+    gbr_garis(imageDataSaya, 100, 150, 300, 150, 0, 255, 0); //x
+    gbr_garis(imageDataSaya, 100, 200, 300, 200, 0, 255, 0);
+    gbr_garis(imageDataSaya, 100, 150, 100, 200, 0, 255, 0); //y
+    gbr_garis(imageDataSaya, 300, 150, 300, 200, 0, 255, 0);
+    // floodFillStack(imageDataSaya, {x:309,y:151}, {r:0,g:255,b:0})
 }

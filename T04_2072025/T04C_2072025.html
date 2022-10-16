@@ -93,6 +93,7 @@
             imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height)
 
             gbr_lingkaran_polar(imageDataSaya, 200, 200, 5 + jalan, 255, 0, 0, 0);
+            floodFillStack(imageDataSaya, { x: 200, y: 200 }, { r: 255, g: 0, b: 0 })
             jalan = (jalan + 1) % 50;
             ctx.putImageData(imageDataSaya, 0, 0);
             requestAnimationFrame(lingkaran_jalan);

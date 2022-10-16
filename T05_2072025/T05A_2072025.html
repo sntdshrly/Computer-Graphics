@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="600" height="600"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
+        // draw here
+        function animated_circle(){
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            gbr_lingkaran_sudut(imageDataSaya, 10, 10, 8, 255, 0, 0);
+            let rnd_x = Math.floor(Math.random() * 601);
+            let rnd_y = Math.floor(Math.random() * 601);
+            let titik_pindah = translasi([10, 10], [rnd_x, rnd_y]);
+            x_new = titik_pindah[0];
+            y_new = titik_pindah[1];
+            gbr_lingkaran_sudut(imageDataSaya, x_new, y_new, 10, 255, 0, 0);
+            ctx.putImageData(imageDataSaya, 0, 0); // put img
+            // requestAnimationFrame(animated_circle);
+        }
+        animated_circle();
+    </script>
+</body>
+
+</html>
