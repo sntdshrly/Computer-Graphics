@@ -20,20 +20,66 @@
         var canvasKita = document.querySelector("#canvas1");
         var ctx = canvasKita.getContext("2d");
         var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
-        function gbr_klik(){
+        let titik = [];
+        let titik_pusat_arr = [];
+        function gbr_klik() {
             // console.log(event);
-            let titik = [
-            {x:event.offsetX,y:event.offsetY},
-            {x:event.offsetX,y:event.offsetY+50},
-            {x:event.offsetX+50,y:event.offsetY+50},
-            {x:event.offsetX+50,y:event.offsetY},
+            titik = [
+                { x: event.offsetX, y: event.offsetY },
+                { x: event.offsetX, y: event.offsetY + 50 },
+                { x: event.offsetX + 50, y: event.offsetY + 50 },
+                { x: event.offsetX + 50, y: event.offsetY },
             ]
-            polygon(imageDataSaya, titik, [255,0,0]);
-            ctx.putImageData(imageDataSaya, 0 , 0);
+            // titik_pusat_arr.push(event.offsetX + 25);
+            // titik_pusat_arr.push(event.offsetY + 25);
+            titik_pusat_arr[0] = event.offsetX + 25;
+            titik_pusat_arr[1] = event.offsetY + 25;
+            polygon(imageDataSaya, titik, [255, 0, 0]);
+            floodFillStack(imageDataSaya, canvasKita, titik_pusat_arr[0], titik_pusat_arr[1], { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 });
+            ctx.putImageData(imageDataSaya, 0, 0);
         }
-        canvasKita.addEventListener("click",gbr_klik);
-        // draw here
+        function translasi_event(angka_pindah) {
+            // clear
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            //
+            titik = translasi_byk(titik, [angka_pindah, 0]);
+            titik_pusat_arr[0] += angka_pindah;
+            polygon(imageDataSaya, titik, [255, 0, 0]);
+        }
+        canvasKita.addEventListener("click", gbr_klik);
+        document.addEventListener("keyup", (event) => {
+            if (event.key == "ArrowLeft") {
+                translasi_event(-10);
+            }
+            else if (event.key == "ArrowRight") {
+                translasi_event(10);
+            }
+            else if (event.key == "ArrowUp") {
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                //
+                titik = rotasi_byk_fixed_kotak(titik, 10, titik_pusat_arr);
+                polygon(imageDataSaya, titik, [255, 0, 0]);
+            }
+            else if (event.key == "ArrowDown") {
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                //
+                titik = rotasi_byk_fixed_kotak(titik, -10, titik_pusat_arr);
+                polygon(imageDataSaya, titik, [255, 0, 0]);
+            }
+
+            floodFillStack(imageDataSaya, canvasKita, titik_pusat_arr[0], titik_pusat_arr[1], { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 });
+            ctx.putImageData(imageDataSaya, 0, 0);
+        });
         function reset_func() {
+            // clear
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            //
         }
     </script>
     <br>

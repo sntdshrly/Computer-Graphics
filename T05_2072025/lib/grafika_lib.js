@@ -102,6 +102,15 @@ function skala_byk(titik2nya, pindahnya){
     }
     return isi
 }
+function skala_byk_fixed(titik2nya, pindahnya, titik_pusat){
+    titik2_translasi = translasi_byk(titik2nya,[titik_pusat[0],titik_pusat[1]]);
+    let isi = [];
+    for(let i=0;i<titik2_translasi.length;i++){
+        let [x,y] = skala([titik2_translasi[i].x,titik2_translasi[i].y], pindahnya);
+        isi.push({x:x,y:y});
+    }
+    return isi
+}
 function rotasi(awal,A){
     let [x,y]=awal;
     let x_akhir = x*Math.cos(A) - y*Math.sin(A);
@@ -122,13 +131,21 @@ function rotasi_byk_fixed(titik2nya, pindahnya){
     for(let i=0;i<titik2_translasi.length;i++){
         let [x,y] = rotasi([titik2_translasi[i].x,titik2_translasi[i].y], pindahnya);
         isi.push({x:x,y:y});
-        console.log(titik2_translasi[i].x);
     }
-    console.log(isi);
     titik2_hasil = translasi_byk(isi,[isi[0].x,isi[0].y]);
     return titik2_hasil
 }
-function gbr_lingkaran_sudut(imageDataTemp, xc, yc, radius, r,g,b){
+function rotasi_byk_fixed_kotak(titik2nya, pindahnya, titik_pusat){
+    titik2_translasi = translasi_byk(titik2nya,[-titik_pusat[0],-titik_pusat[1]]);
+    let isi = [];
+    for(let i=0;i<titik2_translasi.length;i++){
+        let [x,y] = rotasi([titik2_translasi[i].x,titik2_translasi[i].y], pindahnya);
+        isi.push({x:x,y:y});
+    }
+    titik2_hasil = translasi_byk(isi,[titik_pusat[0],titik_pusat[1]]);
+    return titik2_hasil
+}
+function gbr_lingkaran_sudut(imageDataTemp, xc, yc, radius,r,g,b){
     // math * pi * 2 = 360 derajat
     // sin & cos di js itu menerima radian
     // mainin theta makin kecil, lingkaran bagus berarti
@@ -176,8 +193,28 @@ function floodFillStack(imageDataSaya, canvas, x0, y0, toFlood, color) {
 
             tumpukan.push({ x: titik_skrg.x + 1, y: titik_skrg.y })
             tumpukan.push({ x: titik_skrg.x - 1, y: titik_skrg.y })
-            // tumpukan.push({ x: titik_skrg.x, y: titik_skrg.y + 1 })
+            tumpukan.push({ x: titik_skrg.x, y: titik_skrg.y + 1 })
             tumpukan.push({ x: titik_skrg.x, y: titik_skrg.y - 1 })
         }
     }
+}
+
+function gbr_polyline(imageDataSaya, titik, warna){
+    r = warna[0];
+    g = warna[1];
+    b = warna[2];
+    for(i=0;i<titik.length-1;i++){
+        x1 = titik[i].x;
+        y1 = titik[i].y;
+        x2 = titik[i+1].x;
+        y2 = titik[i+1].y;
+        gbr_garis(imageDataSaya,x1,y1,x2,y2,r,g,b);
+    }
+}
+
+function clear(){
+    // clear
+    ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+    imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+    //
 }

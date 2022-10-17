@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
+        // draw here
+        let titik = [];
+        let i = 0;
+        function gbr_huruf(titik) {
+            clear();
+            titik = [
+                { x: 100, y: 100 }, // titik 0
+                { x: 200, y: 100 }, // titik 1
+                { x: 100, y: 150 }, // titik 2
+                { x: 200, y: 150 }, // titik 3
+                { x: 100, y: 200 }, // titik 4
+                { x: 200, y: 200 }, // titik 5
+            ];
+            titik = translasi_byk(titik, [i, i]);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[1].x, titik[1].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[2].x, titik[2].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[2].x, titik[2].y, titik[3].x, titik[3].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[3].x, titik[3].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[4].x, titik[4].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            ctx.putImageData(imageDataSaya, 0, 0);
+            i += 1;
+            if (i < canvasKita.width - 250) {
+                requestAnimationFrame(gbr_huruf);
+            }
+            else {
+                // cancelAnimationFrame(gbr_huruf);
+                console.log(titik);
+                rotasi_huruf(titik);
+            }
+        }
+        function rotasi_huruf(titik) {
+            clear();
+            titik = rotasi_byk_fixed_kotak(titik, 20, [699, 699]);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[1].x, titik[1].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[2].x, titik[2].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[2].x, titik[2].y, titik[3].x, titik[3].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[3].x, titik[3].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[4].x, titik[4].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            ctx.putImageData(imageDataSaya, 0, 0);
+            if(titik[0].x>724){
+                scaling_huruf(titik);
+            }
+        }
+        function scaling_huruf(titik){
+            console.log(titik);
+            clear();
+            titik = skala_byk_fixed(titik, [0.5,0.5], [699, 699]);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[1].x, titik[1].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[0].x, titik[0].y, titik[2].x, titik[2].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[2].x, titik[2].y, titik[3].x, titik[3].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[3].x, titik[3].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            gbr_garis(imageDataSaya, titik[4].x, titik[4].y, titik[5].x, titik[5].y, 255, 0, 0, 0);
+            
+            console.log(titik);
+            ctx.putImageData(imageDataSaya, 0, 0);
+        }
+        gbr_huruf(titik);
+        ctx.putImageData(imageDataSaya, 0, 0); // put img
+    </script>
+</body>
+
+</html>

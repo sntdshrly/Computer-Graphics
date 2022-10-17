@@ -21,17 +21,31 @@
         var ctx = canvasKita.getContext("2d");
         var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
         // draw here
-        function animated_circle(){
+        let titik_pindah = [[100, 100, 2, 2], [200, 100, 1, 1]];
+        // let titik_pindah = [100,100];
+        let penambahan_x = 2;
+        let penambahan_y = 2;
+        function animated_circle() {
+            // clear
             ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
-            gbr_lingkaran_sudut(imageDataSaya, 10, 10, 8, 255, 0, 0);
-            let rnd_x = Math.floor(Math.random() * 601);
-            let rnd_y = Math.floor(Math.random() * 601);
-            let titik_pindah = translasi([10, 10], [rnd_x, rnd_y]);
-            x_new = titik_pindah[0];
-            y_new = titik_pindah[1];
-            gbr_lingkaran_sudut(imageDataSaya, x_new, y_new, 10, 255, 0, 0);
-            ctx.putImageData(imageDataSaya, 0, 0); // put img
-            // requestAnimationFrame(animated_circle);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            //
+            for (let i = 0; i < titik_pindah.length; i++) {
+                [titik_pindah[i][0],titik_pindah[i][1]] = translasi(titik_pindah[i], [titik_pindah[i][2], titik_pindah[i][3]]);
+                x_new = titik_pindah[i][0];
+                y_new = titik_pindah[i][1];
+                gbr_lingkaran_sudut(imageDataSaya, x_new, y_new, 10, 255, 0, 0);
+                floodFillStack(imageDataSaya, canvasKita, x_new, y_new, { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 })
+                ctx.putImageData(imageDataSaya, 0, 0); // put img
+                // -10 karna radius
+                if (titik_pindah[i][0] > canvasKita.width-10 || titik_pindah[i][0] < 10) {
+                    titik_pindah[i][2] = -titik_pindah[i][2];
+                }
+                if (titik_pindah[i][1] > canvasKita.height-10 || titik_pindah[i][1] < 10) {
+                    titik_pindah[i][3] = -titik_pindah[i][3];
+                }
+            }
+            requestAnimationFrame(animated_circle);
         }
         animated_circle();
     </script>

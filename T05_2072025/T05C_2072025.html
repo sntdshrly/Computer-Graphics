@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="600" height="600"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        // draw here
+        let penambahan = 0;
+        function scale_animated_persegi() {
+            clear();
+            let titik = [
+                { x: 200, y: 200 },
+                { x: 200, y: 250 },
+                { x: 250, y: 250 },
+                { x: 250, y: 200 }
+            ]
+            titik = translasi_byk(titik, [penambahan,penambahan]);
+            polygon(imageDataSaya, titik, [255, 0, 0]);
+            floodFillStack(imageDataSaya, canvasKita, titik[0].x+10, titik[0].y+10, { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 })
+            penambahan += 1;
+            ctx.putImageData(imageDataSaya, 0, 0);
+            if(penambahan < canvasKita.width - 300){
+                requestAnimationFrame(scale_animated_persegi);
+            }
+            else{
+                rotasi_benda(titik);
+            }
+        }
+        function rotasi_benda(titik) {
+            clear();
+            titik = rotasi_byk_fixed_kotak(titik, 20, [523, 523]);
+            polygon(imageDataSaya, titik, [255, 0, 0]);
+            floodFillStack(imageDataSaya, canvasKita, 525, 525, { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 })
+            ctx.putImageData(imageDataSaya, 0, 0);
+        }
+        scale_animated_persegi();
+        ctx.putImageData(imageDataSaya, 0, 0);
+    </script>
+</body>
+
+</html>
