@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        // DRAW
+        let titik_pusat = [[200, 200],
+        [400, 400],
+        [300, 300],
+        ];
+        function animated_lingkaran() {
+            ctx.clearRect(0, 0, canvasKita.clientWidth, canvasKita.clientHeight);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            const rotasi = MatrixGrafkom.createFixedPointRotation(titik_pusat[2], 10);
+            titik_pusat[0] = MatrixGrafkom.transformPoint(titik_pusat[0], rotasi);
+            titik_pusat[1] = MatrixGrafkom.transformPoint(titik_pusat[1], rotasi);
+            gbr_lingkaran_sudut(imageDataSaya, titik_pusat[0][0], titik_pusat[0][1], 10, 255, 0, 0); // Lingkaran dalem kecil
+            gbr_lingkaran_sudut(imageDataSaya, titik_pusat[1][0], titik_pusat[1][1], 20, 255, 0, 0); // Lingkaran luar kecil
+            gbr_lingkaran_sudut(imageDataSaya, titik_pusat[2][0], titik_pusat[2][1], 100, 255, 0, 0); // Lingkaran besar
+            ctx.putImageData(imageDataSaya, 0, 0);
+            setTimeout(() => { requestAnimationFrame(animated_lingkaran); }, 1000 / 100)
+        }
+        animated_lingkaran();
+        ctx.putImageData(imageDataSaya, 0, 0);
+
+    </script>
+</body>
+
+</html>

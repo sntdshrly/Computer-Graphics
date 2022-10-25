@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        // DRAW
+        let points = [
+            [200, 100],
+            [100, 300],
+            [300, 300],
+        ];
+        let points_2 = [
+            [75, 45],
+            [50, 100],
+            [100, 100],
+        ];
+        let titik_pusat = [200, 200];
+        function animated_segitiga() {
+            ctx.clearRect(0, 0, canvasKita.clientWidth, canvasKita.clientHeight);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            const rotasi = MatrixGrafkom.createFixedPointRotation(titik_pusat, 10);
+            points_2 = MatrixGrafkom.transformPoints(points_2, rotasi);
+            polygon(points, "green");
+            floodFillStack(imageDataSaya, canvasKita, 151, 151, { r: 0, g: 0, b: 0 }, { r: 0, g: 255, b: 0 })
+            polygon(points_2, "blue");
+            setTimeout(() => { requestAnimationFrame(animated_segitiga); }, 1000 / 10)
+        }
+        animated_segitiga();
+    </script>
+</body>
+
+</html>

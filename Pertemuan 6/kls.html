@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafkom_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        // DRAW
+        let points = [
+            [100, 100],
+            [100, 200],
+            [200, 200],
+        ];
+        polygon(points, "black");
+
+        // TRANSLASI 1
+        // const moving = MatrixGrafkom.createTranslation([100,0]);
+        // let new_points = MatrixGrafkom.transformPoints(points,moving);
+        // polygon(new_points,"blue");
+
+        // // TRANSLASI 2
+        // const moving_2 = MatrixGrafkom.createTranslation([0,100]);
+        // let new_points_2 = MatrixGrafkom.transformPoints(points,moving_2);
+        // polygon(new_points_2,"blue");
+
+        // // MULTIPLY 1 & 2
+        // const gabungan = MatrixGrafkom.multiplyMatrix(moving,moving_2);
+        // let new_points_3 = MatrixGrafkom.transformPoints(points,gabungan);
+        // polygon(new_points_3,"red");
+
+        // SCALING
+        // const scaling = MatrixGrafkom.createScale([2,2]);
+        // let new_points_4 = MatrixGrafkom.transformPoints(points,scaling);
+        // polygon(new_points_4,"green");
+
+        // ROTATION | MATH.PI = 180 drjt
+        // const rotation = MatrixGrafkom.createRotation(Math.PI/8);
+        // let new_points_5 = MatrixGrafkom.transformPoints(points,rotation);
+        // polygon(new_points_5,"green");
+
+        // SCALING FIXED
+        // const scaling_fixed = MatrixGrafkom.createFixedPointScale([150,150],[2, 2]);
+        // let new_points_5 = MatrixGrafkom.transformPoints(points,scaling_fixed);
+        // polygon(new_points_5,"green");
+
+        // ROTATION FIXED
+        // const rotation_fixed = MatrixGrafkom.createFixedPointRotation([150,150],Math.PI/8);
+        // let new_points_6 = MatrixGrafkom.transformPoints(points,rotation_fixed);
+        // polygon(new_points_6,"green");
+
+    </script>
+</body>
+
+</html>
