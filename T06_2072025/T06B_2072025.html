@@ -20,6 +20,7 @@
         var canvasKita = document.querySelector("#canvas1");
         var ctx = canvasKita.getContext("2d");
         var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+        
         // DRAW
         let points = [
             [200, 100],
@@ -32,15 +33,25 @@
             [100, 100],
         ];
         let titik_pusat = [200, 200];
+        let titik_pusat_2 = [75,75];
         function animated_segitiga() {
             ctx.clearRect(0, 0, canvasKita.clientWidth, canvasKita.clientHeight);
             imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
-            const rotasi = MatrixGrafkom.createFixedPointRotation(titik_pusat, 10);
-            points_2 = MatrixGrafkom.transformPoints(points_2, rotasi);
-            polygon(points, "green");
-            floodFillStack(imageDataSaya, canvasKita, 151, 151, { r: 0, g: 0, b: 0 }, { r: 0, g: 255, b: 0 })
-            polygon(points_2, "blue");
+            const rotasi_SB = MatrixGrafkom.createFixedPointRotation(titik_pusat, 10);
+            const rotasi_SK = MatrixGrafkom.createFixedPointRotation(points_2[0], -10);
+            let matrix_multiply = MatrixGrafkom.multiplyMatrix(rotasi_SB, rotasi_SK);
+
+            points_2 = MatrixGrafkom.transformPoints(points_2, matrix_multiply);
+            titik_pusat_2 = MatrixGrafkom.transformPoint(titik_pusat_2, matrix_multiply);
+            polygon_matriks(imageDataSaya, points, [0,255,0]);
+            floodFillStack(imageDataSaya, canvasKita, 200, 200, { r: 0, g: 0, b: 0 }, { r: 0, g: 255, b: 0 })
+            polygon_matriks(imageDataSaya, points_2, [0,0,255]);
+            // gbr_titik(imageDataSaya,{x:titik_pusat_2[0],y:titik_pusat_2[1]},{r:0,g:0,b:255});
+            console.log(titik_pusat_2);
+
+            floodFillStack(imageDataSaya, canvasKita, titik_pusat_2[0], titik_pusat_2[1], { r: 0, g: 0, b: 0 }, { r: 0, g: 0, b: 255 })
             setTimeout(() => { requestAnimationFrame(animated_segitiga); }, 1000 / 10)
+            ctx.putImageData(imageDataSaya, 0, 0);
         }
         animated_segitiga();
     </script>
