@@ -1,1 +1,114 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="lib/grafika_lib.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas1" width="600" height="600"></canvas>
+    <script>
+        var canvasKita = document.querySelector("#canvas1");
+        var ctx = canvasKita.getContext("2d");
+        var imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height); // start (0,0) end (w,h)
+        // draw here
+        // Returns a random integer from 1 to 3:
+        random_x = Math.floor(Math.random() * 3) + 1;
+        random_y = Math.floor(Math.random() * 3) + 1;
+        let titik_pindah = [
+            [100, 100, random_x, random_y]
+        ];
+        let penambahan_x = 2;
+        let penambahan_y = 2;
+        let points = [
+            [100, 500],
+            [200, 500]
+        ];
+        function animated_circle() {
+            // clear
+            ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+            imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+            for (let i = 0; i < titik_pindah.length; i++) {
+                [titik_pindah[i][0], titik_pindah[i][1]] = translasi(titik_pindah[i], [titik_pindah[i][2], titik_pindah[i][3]]);
+                x_new = titik_pindah[i][0];
+                y_new = titik_pindah[i][1];
+                gbr_lingkaran_sudut(imageDataSaya, x_new, y_new, 10, 255, 0, 0);
+                floodFillStack(imageDataSaya, canvasKita, x_new, y_new, { r: 0, g: 0, b: 0 }, { r: 255, g: 0, b: 0 })
+                polygon_matriks(imageDataSaya, points, [0, 0, 255]);
+                ctx.putImageData(imageDataSaya, 0, 0);
+                // -10 karna radius
+                if (titik_pindah[0][0] >= points[0][0] - 10 && titik_pindah[0][0] <= points[1][0] - 10 && titik_pindah[0][1] == points[0][1] - 10) {
+                    titik_pindah[i][2] = -titik_pindah[i][2];
+                    titik_pindah[i][3] = -titik_pindah[i][3];
+                }
+                if (titik_pindah[i][0] > canvasKita.width - 10 || titik_pindah[i][0] < 10) {
+                    titik_pindah[i][2] = -titik_pindah[i][2];
+                }
+                if (titik_pindah[i][1] > canvasKita.height - 10 || titik_pindah[i][1] < 10) {
+                    titik_pindah[i][3] = -titik_pindah[i][3];
+                }
+                if (titik_pindah[i][1] > canvasKita.height - 10) {
+                    cancelAnimationFrame(animated_circle);
+                }
+                else if (titik_pindah[i][1] < canvasKita.height - 10) {
+                    requestAnimationFrame(animated_circle);
+                }
+            }
+        }
+        animated_circle();
+
+        document.addEventListener("keyup", (event) => {
+            if (event.key == "ArrowRight") {
+                let moving = MatrixGrafkom.createTranslation([20, 0]);
+                points = MatrixGrafkom.transformPoints(points, moving);
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                // draw
+                polygon_matriks(imageDataSaya, points, [0, 0, 255]);
+                ctx.putImageData(imageDataSaya, 0, 0);
+            }
+            else if (event.key == "ArrowLeft") {
+                let moving = MatrixGrafkom.createTranslation([-20, 0]);
+                points = MatrixGrafkom.transformPoints(points, moving);
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                // draw
+                polygon_matriks(imageDataSaya, points, [0, 0, 255]);
+                ctx.putImageData(imageDataSaya, 0, 0);
+            }
+            else if (event.key == "ArrowUp") {
+                let moving = MatrixGrafkom.createTranslation([0, -20]);
+                points = MatrixGrafkom.transformPoints(points, moving);
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                // draw
+                polygon_matriks(imageDataSaya, points, [0, 0, 255]);
+                ctx.putImageData(imageDataSaya, 0, 0);
+            }
+            else if (event.key == "ArrowDown") {
+                let moving = MatrixGrafkom.createTranslation([0, 20]);
+                points = MatrixGrafkom.transformPoints(points, moving);
+                // clear
+                ctx.clearRect(0, 0, canvasKita.width, canvasKita.height);
+                imageDataSaya = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+                // draw
+                polygon_matriks(imageDataSaya, points, [0, 0, 255]);
+                ctx.putImageData(imageDataSaya, 0, 0);
+            }
+        });
+    </script>
+</body>
+
+</html>
