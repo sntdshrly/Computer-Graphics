@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas1 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="800" height="800"></canvas>
+    <script>
+        // sesuai dg css
+          var canvasKita = document.querySelector("#canvas1");
+        // cara gmn akses gambarnya
+        var ctx = canvasKita.getContext("2d");
+        // mulai drmn , sebesar apa
+        var imageDataSaya = ctx.getImageData(0,0,canvasKita.width, canvasKita.height);
+    
+        function gbr_titik(imageDataTemp,x,y,r,g,b){
+            var index = 4 *(x+y*canvasKita.width);
+            imageDataTemp.data[index] = r;
+            imageDataTemp.data[index+1] = g;
+        imageDataTemp.data[index+2] = b;
+        imageDataTemp.data[index+3] = 255;     
+        }
+
+        function garis (datanya, awal, akhir, warnanya){
+            let [x1,y1] = awal;
+            let [x2,y2] = akhir;
+            let [r,g,b] = warnanya;
+
+            let dx = x2-x1;
+            let dy = y2-y1;
+            if(Math.abs(dy)>Math.abs(dx)){
+                // jalan berdasarkan y
+                let x = x1;
+                // atas ; positif
+                if(y2>y1){
+                    for(let y=y1;y<y2;y++){
+                    x+=dx/Math.abs(dy);
+                    // garis x sama y dibulatkan
+                    gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
+                }
+                }
+                // bawah ; negatif
+                else{
+                    for(let y=y1;y>y2;y--){
+                        x+=dx/Math.abs(dy);
+                        gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
+                    }
+                }
+            }
+            // jalan berdasarkan x
+            if(Math.abs(dx)>Math.abs(dy)){
+                let y = y1;
+                // kanan ; positif
+                if(x2>x1){
+                    for(let x=x1;x<x2;x++){
+                    y+=dy/Math.abs(dx);
+                    gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
+                }
+                }
+                // kiri ; negatif   
+                else{
+                    for(let x=x1;x>x2;x--){
+                        y+=dy/Math.abs(dx);
+                        gbr_titik(datanya,Math.round(x),Math.round(y),r,g,b)
+                    }
+                }
+            }
+        }
+      
+        // garis(imageDataSaya,[100,100],[200,300],[255,0,0]); // atas
+        // garis(imageDataSaya,[100,300],[100,100],[255,0,0]); // bawah
+        // garis(imageDataSaya,[100,100],[300,100],[255,0,0]); // kanan
+        // garis(imageDataSaya,[300,100],[100,100],[255,0,0]); // kiri
+
+        // LATIHAN
+        garis(imageDataSaya,[100,200],[300,100],[255,0,0]); // kanan
+        garis(imageDataSaya,[300,100],[500,100],[255,0,0]); // kanan
+        garis(imageDataSaya,[500,100],[700,200],[255,0,0]); // kanan
+        garis(imageDataSaya,[700,200],[500,300],[255,0,0]); // kiri
+        garis(imageDataSaya,[500,300],[300,300],[255,0,0]); // kiri
+        garis(imageDataSaya,[300,300],[100,200],[255,0,0]); // kiri
+        garis(imageDataSaya,[300,300],[300,100],[255,0,0]); // bawah
+        garis(imageDataSaya,[500,100],[500,300],[255,0,0]); // atas
+
+        // tempatnya di mana
+        ctx.putImageData(imageDataSaya, 0 , 0);
+    </script>
+</body>
+</html>
