@@ -28,7 +28,7 @@ geometryCustom.setIndex([
     // 1, 4, 3, // kanan segitiga atas
     // 3, 4, 5 // kanan segitiga bawah
 ]);
-const material = new THREE.MeshBasicMaterial({ color: 0xF4A900 });
+const material = new THREE.MeshBasicMaterial({ color: 0xF4A900, side: THREE.DoubleSide});
 const mesh = new THREE.Mesh(geometryCustom, material);
 mesh.position.set(0, 0, 0);
 scene.add(mesh);
@@ -53,7 +53,7 @@ geometryCutter.setIndex([
     5, 7, 6,// depan segitiga atas (kiri bawah)
     4, 5, 6 // depan segitiga bawah (kiri bawah)
 ]);
-const materialCutter = new THREE.MeshBasicMaterial({ color: 0x000000 });
+const materialCutter = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide});
 const meshCutter = new THREE.Mesh(geometryCutter, materialCutter);
 meshCutter.position.set(0, 0, 0);
 scene.add(meshCutter);
@@ -62,9 +62,9 @@ scene.add(meshCutter);
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    // mesh.rotation.x += 0.01;
-    // meshCutter.rotation.x += 0.01;
-    // mesh.rotation.y += 0.01;
-    // meshCutter.rotation.y += 0.01;
+    mesh.rotation.x += 0.01;
+    meshCutter.rotation.x += 0.01;
+    mesh.rotation.y += 0.01;
+    meshCutter.rotation.y += 0.01;
 }
 animate();

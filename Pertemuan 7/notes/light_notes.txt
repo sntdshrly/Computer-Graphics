@@ -1,0 +1,15 @@
+phi = 180 derajat
+
+ambient: sama rata di tiap sisi
+
+point: lightnya punya posisi, nerangin berdasarkan titik pusatnya. kalo ga ditentukan di 0,0,0.
+
+spotlight: kaya di theater"
+light02.target = box;
+
+helper01: untuk menampilkan si light kita di layar
+const helper = new THREE.PointLightHelper(light01, 0.1, 0xffffff);
+scene.add(helper01);
+
+cast shadow buat benda yang pengen ada bayangan/menghasilkan bayangan
+receive menerima bayangan: ntar pantulannya muncul/ ga

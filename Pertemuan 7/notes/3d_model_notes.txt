@@ -1,0 +1,6 @@
+Note: recommend using glTF (GL Transmission Format)
+tapi support FBX dan obj files
+
+3D Model:
+https://sketchfab.com/
+https://www.mixamo.com/#/

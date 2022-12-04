@@ -31,6 +31,7 @@ const sphere = new THREE.Mesh( geometrySphere, materialSpehere );
 sphere.position.set(3, 0, 0);
 scene.add( sphere )
 
+
 // Rendering the scene
 function animate() {
     requestAnimationFrame(animate);
